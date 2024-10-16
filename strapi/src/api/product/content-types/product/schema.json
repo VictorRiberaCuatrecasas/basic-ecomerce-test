@@ -1,0 +1,52 @@
+{
+  "kind": "collectionType",
+  "collectionName": "products",
+  "info": {
+    "singularName": "product",
+    "pluralName": "products",
+    "displayName": "Product",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "price": {
+      "type": "decimal",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "electronics",
+        "jewelery",
+        "menClothing",
+        "womenClothing"
+      ],
+      "required": true
+    },
+    "productId": {
+      "type": "biginteger",
+      "required": true
+    },
+    "image": {
+      "type": "string"
+    },
+    "rating": {
+      "displayName": "rating",
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.rating",
+      "required": true
+    }
+  }
+}

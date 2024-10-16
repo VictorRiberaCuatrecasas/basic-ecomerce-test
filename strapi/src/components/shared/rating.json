@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_shared_ratings",
+  "info": {
+    "displayName": "rating"
+  },
+  "options": {},
+  "attributes": {
+    "rate": {
+      "type": "decimal"
+    },
+    "count": {
+      "type": "biginteger"
+    }
+  }
+}
