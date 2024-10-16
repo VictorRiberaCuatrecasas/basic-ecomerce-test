@@ -28,6 +28,8 @@ npm install
 ```
 
 ### 2. Running the Project
+
+- node versions 18 - 20 required.
 You can run both the Vue front-end and Strapi backend simultaneously with the following command:
 In **/vue** directory:
 ```bash
