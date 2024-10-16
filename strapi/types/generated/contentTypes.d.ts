@@ -594,6 +594,7 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
     name: Schema.Attribute.String;
     slug: Schema.Attribute.UID;
     description: Schema.Attribute.Text;
+    products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -652,14 +653,11 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     title: Schema.Attribute.String & Schema.Attribute.Required;
     price: Schema.Attribute.Decimal & Schema.Attribute.Required;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
-    category: Schema.Attribute.Enumeration<
-      ['electronics', 'jewelery', 'menClothing', 'womenClothing']
-    > &
-      Schema.Attribute.Required;
     productId: Schema.Attribute.BigInteger & Schema.Attribute.Required;
     image: Schema.Attribute.String;
     rating: Schema.Attribute.Component<'shared.rating', false> &
       Schema.Attribute.Required;
+    category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
