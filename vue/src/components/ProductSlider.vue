@@ -2,10 +2,11 @@
     <div class="relative">
         <!-- Left Arrow -->
         <button
+            v-if="limitedProducts && limitedProducts.length"
             class="absolute flex z-50 left-0 md:-left-8 top-1/2 transform -translate-y-1/2 bg-background-darker bg-opacity-80 p-3 rounded-full shadow-md transition-opacity duration-200"
             :disabled="isAtStart"
             @click="scrollLeft"
-            :class="{ 'opacity-50 cursor-not-allowed': isAtStart }"
+            :class="{ hidden: !limitedProducts || !limitedProducts.length }"
             aria-label="Scroll left">
             <i class="material-icons">chevron_left</i>
         </button>
@@ -21,10 +22,11 @@
 
         <!-- Right Arrow -->
         <button
+            v-if="limitedProducts && limitedProducts.length"
             class="absolute z-50 flex right-0 md:-right-8 top-1/2 transform -translate-y-1/2 bg-background-darker bg-opacity-80 p-3 rounded-full shadow-md transition-opacity duration-200"
             :disabled="isAtEnd"
             @click="scrollRight"
-            :class="{ 'opacity-50 cursor-not-allowed': isAtEnd }"
+            :class="{ hidden: !limitedProducts || !limitedProducts.length }"
             aria-label="Scroll right">
             <i class="material-icons">chevron_right</i>
         </button>
@@ -57,40 +59,37 @@ const limitedProducts = computed(() => {
 });
 
 const checkScroll = () => {
-  if (slider.value) {
-    const scrollLeft = Math.ceil(slider.value.scrollLeft);
-    const maxScrollLeft = slider.value.scrollWidth - slider.value.clientWidth;
+    if (slider.value) {
+        const scrollLeft = Math.ceil(slider.value.scrollLeft);
+        const maxScrollLeft = slider.value.scrollWidth - slider.value.clientWidth;
 
-    isAtStart.value = scrollLeft <= 1;
-    isAtEnd.value = scrollLeft >= maxScrollLeft - 1;
-  }
+        isAtStart.value = scrollLeft <= 1;
+        isAtEnd.value = scrollLeft >= maxScrollLeft - 1;
+    }
 };
 
 // Scroll the slider to the left
 const scrollLeft = () => {
-  slider.value?.scrollBy({ left: -300, behavior: 'smooth' });
+    slider.value?.scrollBy({ left: -300, behavior: 'smooth' });
 };
 
 // Scroll the slider to the right
 const scrollRight = () => {
-  slider.value?.scrollBy({ left: 300, behavior: 'smooth' });
+    slider.value?.scrollBy({ left: 300, behavior: 'smooth' });
 };
 
-const handleResize = () => {
-    checkScroll();
-};
-
+//TODO: fix timeouthack for scrolling buttons
 onMounted(() => {
-    () => {
-        nextTick(() => {
+    window.addEventListener('resize', checkScroll);
+    nextTick(() => {
+        setTimeout(() => {
             checkScroll();
-            window.addEventListener('resize', handleResize);
-        });
-    };
+        }, 500);
+    });
 });
 
 onBeforeUnmount(() => {
-    window.removeEventListener('resize', handleResize);
+    window.removeEventListener('resize', checkScroll);
 });
 
 watch(
