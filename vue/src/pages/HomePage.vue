@@ -166,13 +166,11 @@ const loadProducts = async () => {
       (product) => product.category.slug === category.slug
     );
   });
-
-    console.log(allProducts);
 };
 
 onMounted(() => {
     loadProducts();
-});
+}); 
 </script>
 
 <style scoped></style>
