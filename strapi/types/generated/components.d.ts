@@ -73,21 +73,6 @@ export interface SharedMedia extends Struct.ComponentSchema {
   };
 }
 
-export interface SharedAddress extends Struct.ComponentSchema {
-  collectionName: 'components_shared_addresses';
-  info: {
-    displayName: 'address';
-  };
-  attributes: {
-    addressLine1: Schema.Attribute.String & Schema.Attribute.Required;
-    addressLine2: Schema.Attribute.String;
-    city: Schema.Attribute.String & Schema.Attribute.Required;
-    postalCode: Schema.Attribute.String & Schema.Attribute.Required;
-    country: Schema.Attribute.String & Schema.Attribute.Required;
-    contactPhone: Schema.Attribute.String;
-  };
-}
-
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
@@ -97,7 +82,6 @@ declare module '@strapi/strapi' {
       'shared.rating': SharedRating;
       'shared.quote': SharedQuote;
       'shared.media': SharedMedia;
-      'shared.address': SharedAddress;
     }
   }
 }

@@ -513,76 +513,6 @@ export interface ApiAboutAbout extends Struct.SingleTypeSchema {
   };
 }
 
-export interface ApiCartCart extends Struct.CollectionTypeSchema {
-  collectionName: 'carts';
-  info: {
-    singularName: 'cart';
-    pluralName: 'carts';
-    displayName: 'Cart';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    customer: Schema.Attribute.Relation<'oneToOne', 'api::customer.customer'>;
-    cartItems: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::cart-item.cart-item'
-    >;
-    guestSessionId: Schema.Attribute.String;
-    totalPrice: Schema.Attribute.Decimal & Schema.Attribute.Required;
-    cartStatus: Schema.Attribute.Enumeration<
-      ['open', 'completed', 'abandoned']
-    >;
-    orderUpdatedAt: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    discounts: Schema.Attribute.Decimal;
-    taxes: Schema.Attribute.Decimal;
-    currency: Schema.Attribute.Enumeration<['EUR']> &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'EUR'>;
-    shippingAddress: Schema.Attribute.Component<'shared.address', true>;
-    notes: Schema.Attribute.Text;
-    createdAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    publishedAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'api::cart.cart'>;
-  };
-}
-
-export interface ApiCartItemCartItem extends Struct.CollectionTypeSchema {
-  collectionName: 'cart_items';
-  info: {
-    singularName: 'cart-item';
-    pluralName: 'cart-items';
-    displayName: 'CartItem';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    product: Schema.Attribute.Relation<'oneToOne', 'api::product.product'>;
-    quantity: Schema.Attribute.Integer;
-    createdAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    publishedAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::cart-item.cart-item'
-    >;
-  };
-}
-
 export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   collectionName: 'categories';
   info: {
@@ -615,46 +545,6 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiCustomerCustomer extends Struct.CollectionTypeSchema {
-  collectionName: 'customers';
-  info: {
-    singularName: 'customer';
-    pluralName: 'customers';
-    displayName: 'Customer';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    firstName: Schema.Attribute.String & Schema.Attribute.Required;
-    lastName: Schema.Attribute.String & Schema.Attribute.Required;
-    email: Schema.Attribute.Email & Schema.Attribute.Required;
-    phone: Schema.Attribute.String;
-    password: Schema.Attribute.Password & Schema.Attribute.Required;
-    resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Required;
-    isActive: Schema.Attribute.Boolean & Schema.Attribute.Required;
-    address: Schema.Attribute.Component<'shared.address', false>;
-    orders: Schema.Attribute.Relation<'oneToMany', 'api::order.order'>;
-    role: Schema.Attribute.Enumeration<['admin', 'peasant']> &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'peasant'>;
-    cart: Schema.Attribute.Relation<'oneToOne', 'api::cart.cart'>;
-    createdAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    publishedAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::customer.customer'
-    >;
-  };
-}
-
 export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
   collectionName: 'globals';
   info: {
@@ -680,89 +570,6 @@ export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
       Schema.Attribute.Private;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::global.global'>;
-  };
-}
-
-export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
-  collectionName: 'orders';
-  info: {
-    singularName: 'order';
-    pluralName: 'orders';
-    displayName: 'Order';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    orderNumber: Schema.Attribute.BigInteger & Schema.Attribute.Required;
-    customer: Schema.Attribute.Relation<'manyToOne', 'api::customer.customer'>;
-    productsOrdered: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::cart-item.cart-item'
-    >;
-    orderStatus: Schema.Attribute.Enumeration<
-      ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled']
-    > &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'pending'>;
-    paymentStatus: Schema.Attribute.Enumeration<
-      ['pending', 'paid', 'failed', 'refunded']
-    > &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'pending'>;
-    totalPrice: Schema.Attribute.Decimal &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<0>;
-    subtotalPrice: Schema.Attribute.Decimal &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<0>;
-    shippingFee: Schema.Attribute.Decimal &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<0>;
-    shippingMethod: Schema.Attribute.Enumeration<['standard', 'express']> &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'standard'>;
-    billingAddress: Schema.Attribute.Component<'shared.address', true>;
-    orderCreatedAt: Schema.Attribute.DateTime;
-    notes: Schema.Attribute.Text;
-    trackingNumber: Schema.Attribute.String;
-    createdAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    publishedAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'api::order.order'>;
-  };
-}
-
-export interface ApiPaymentPayment extends Struct.CollectionTypeSchema {
-  collectionName: 'payments';
-  info: {
-    singularName: 'payment';
-    pluralName: 'payments';
-    displayName: 'Payment';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    paymentMethod: Schema.Attribute.Enumeration<['one', 'two']>;
-    createdAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    publishedAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::payment.payment'
-    >;
   };
 }
 
@@ -797,33 +604,6 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::product.product'
-    >;
-  };
-}
-
-export interface ApiShippingShipping extends Struct.CollectionTypeSchema {
-  collectionName: 'shippings';
-  info: {
-    singularName: 'shipping';
-    pluralName: 'shippings';
-    displayName: 'Shipping';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    shippingMethod: Schema.Attribute.Enumeration<['one', 'two']>;
-    createdAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    publishedAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::shipping.shipping'
     >;
   };
 }
@@ -1204,15 +984,9 @@ declare module '@strapi/strapi' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::about.about': ApiAboutAbout;
-      'api::cart.cart': ApiCartCart;
-      'api::cart-item.cart-item': ApiCartItemCartItem;
       'api::category.category': ApiCategoryCategory;
-      'api::customer.customer': ApiCustomerCustomer;
       'api::global.global': ApiGlobalGlobal;
-      'api::order.order': ApiOrderOrder;
-      'api::payment.payment': ApiPaymentPayment;
       'api::product.product': ApiProductProduct;
-      'api::shipping.shipping': ApiShippingShipping;
       'admin::permission': AdminPermission;
       'admin::user': AdminUser;
       'admin::role': AdminRole;
