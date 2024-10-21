@@ -24,7 +24,7 @@
             <div class="w-full flex sm:flex-col justify-between max-sm:items-center">
                 <p class="text-base font-bold text-gray-900" aria-label="Price: ${{ product.price }}">${{ product.price }}</p>
                 <p class="text-xs text-yellow-500" aria-label="Rating: {{ product.rating.rate }} out of 5, based on {{ product.rating.count }} reviews">
-                    Rating: {{ product.rating.rate }} ⭐️ ({{ product.rating.count }})
+                    Rating: {{ product.rating?.rate }} ⭐️ ({{ product.rating?.count }})
                 </p>
             </div>
 

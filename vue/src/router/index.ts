@@ -12,7 +12,7 @@ import { fetchCategorySlugs } from '../services/strapiService';
 let validCategories: string[] = ["all"]; //Allow for hardcoded categories
 const validItemIds = ['item1', 'item2', 'item3'];
 
-const isValidCategory = (categoryName: string): boolean => validCategories.includes(categoryName);
+const isValidCategory = (categorySlug: string): boolean => validCategories.includes(categorySlug);
 const isValidItemId = (itemId: string): boolean => validItemIds.includes(itemId);
 
 const redirectTo404 = (path: string) => {
@@ -28,8 +28,8 @@ const routes: Array<RouteRecordRaw> = [
       { path: '', component: Home },
       { path: 'cart', component: Cart },
       { path: 'checkout', component: Checkout },
-      { path: ':categoryName', component: ProductList },
-      { path: ':categoryName/:itemId', component: ProductDetail },
+      { path: ':categorySlug', component: ProductList },
+      { path: ':categorySlug/:itemId', component: ProductDetail },
       { path: '404', component: NotFound },
     ],
   },
@@ -40,8 +40,8 @@ const routes: Array<RouteRecordRaw> = [
       { path: '', component: Home },
       { path: 'cart', component: Cart },
       { path: 'checkout', component: Checkout },
-      { path: ':categoryName', component: ProductList },
-      { path: ':categoryName/:itemId', component: ProductDetail },
+      { path: ':categorySlug', component: ProductList },
+      { path: ':categorySlug/:itemId', component: ProductDetail },
       { path: '404', component: NotFound },
     ],
   },
@@ -63,8 +63,8 @@ export const initializeRouter = async () => {
 
   // Navigation guard to validate parameters
   router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-    const { categoryName, itemId } = to.params as { categoryName?: string; itemId?: string };
-    if (categoryName && !isValidCategory(categoryName)) {
+    const { categorySlug, itemId } = to.params as { categorySlug?: string; itemId?: string };
+    if (categorySlug && !isValidCategory(categorySlug)) {
       return next(redirectTo404(to.path));
     }
 

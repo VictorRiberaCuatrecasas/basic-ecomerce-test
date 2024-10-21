@@ -18,9 +18,44 @@ export const fetchCategorySlugs = async (): Promise<string[]> => {
     }
 };
 
+export const fetchCategoryBySlug = async (slug: string): Promise<Category | null> => {
+    try {
+        const response = await fetch(`http://localhost:1337/api/categories?filters[slug][$eq]=${slug}&populate[products][populate]=rating`, {
+            headers: {
+                Authorization: `Bearer ${apiToken}`,
+            },
+        });
+        
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch category. Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.data.length > 0) {
+            const category = data.data[0];
+            return {
+                id: category.id,
+                name: category.name,
+                slug: category.slug,
+                description: category.description || '',
+                categoryImgUrl: category.categoryImgUrl || '',
+                products: category.products || [],
+            };
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching category by slug:', error);
+        return null;
+    }
+};
+
+
 export const fetchCategories = async (): Promise<Category[]> => {
     try {
-        const response = await fetch('http://localhost:1337/api/categories?populate=products', {
+        const response = await fetch('http://localhost:1337/api/categories?populate=products[populate]=rating', {
             headers: {
                 Authorization: `Bearer ${apiToken}`,
             },
