@@ -22,6 +22,7 @@
         <!-- Product Grid -->
         <div class="flex-grow grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
             <ProductCard v-for="(product, index) in paginatedProducts" :key="index" :product="product" />
+            <p v-if="!paginatedProducts.length">No products matching the criteria</p>
             <div class="col-span-full">
                 <Pagination v-if="totalPages > 1" :currentPage="currentPage" :totalPages="totalPages" @page-changed="onPageChange" />
             </div>

@@ -25,7 +25,6 @@ export const fetchCategoryBySlug = async (slug: string): Promise<Category | null
                 Authorization: `Bearer ${apiToken}`,
             },
         });
-        
 
         if (!response.ok) {
             throw new Error(`Failed to fetch category. Status: ${response.status}`);
@@ -51,7 +50,6 @@ export const fetchCategoryBySlug = async (slug: string): Promise<Category | null
         return null;
     }
 };
-
 
 export const fetchCategories = async (): Promise<Category[]> => {
     try {
@@ -188,4 +186,25 @@ export const loadProducts = async (): Promise<Product[]> => {
     }
 
     return strapiProducts;
+};
+
+export const fetchProductIds = async (): Promise<string[]> => {
+    try {
+        const response = await fetch('http://localhost:1337/api/products?pagination[limit]=400', {
+            headers: {
+                Authorization: `Bearer ${apiToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch product IDs. Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        return data.data.map((product: any) => product.id.toString());
+    } catch (error) {
+        console.error('Error fetching product IDs from Strapi:', error);
+        return [];
+    }
 };

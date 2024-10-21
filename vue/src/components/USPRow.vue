@@ -51,5 +51,5 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-/* No custom styles needed */
+
 </style>
