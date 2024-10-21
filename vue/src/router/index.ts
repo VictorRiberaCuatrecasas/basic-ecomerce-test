@@ -7,11 +7,10 @@ import ProductDetail from '../pages/ProductDetail.vue';
 import ProductList from '../pages/ProductList.vue';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import NotFound from '../pages/NotFound.vue';
+import { fetchCategorySlugs } from '../services/strapiService';
 
-// Valid categories and item IDs
-const validCategories = ['electronics', 'furniture', 'clothing'];
+let validCategories: string[] = ["all"]; //Allow for hardcoded categories
 const validItemIds = ['item1', 'item2', 'item3'];
-
 
 const isValidCategory = (categoryName: string): boolean => validCategories.includes(categoryName);
 const isValidItemId = (itemId: string): boolean => validItemIds.includes(itemId);
@@ -20,6 +19,7 @@ const redirectTo404 = (path: string) => {
   return path.startsWith('/admin') ? '/admin/404' : '/404';
 };
 
+// Routes setup
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -56,19 +56,24 @@ const router = createRouter({
   routes,
 });
 
-// Navigation guard to validate parameters
-router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-  const { categoryName, itemId } = to.params as { categoryName?: string; itemId?: string };
 
-  if (categoryName && !isValidCategory(categoryName)) {
-    return next(redirectTo404(to.path));
-  }
+export const initializeRouter = async () => {
+  const fetchedCategories = await fetchCategorySlugs();
+  validCategories = [...validCategories, ...fetchedCategories];
 
-  if (itemId && !isValidItemId(itemId)) {
-    return next(redirectTo404(to.path));
-  }
+  // Navigation guard to validate parameters
+  router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+    const { categoryName, itemId } = to.params as { categoryName?: string; itemId?: string };
+    if (categoryName && !isValidCategory(categoryName)) {
+      return next(redirectTo404(to.path));
+    }
 
-  next();
-});
+    if (itemId && !isValidItemId(itemId)) {
+      return next(redirectTo404(to.path));
+    }
+
+    next();
+  });
+};
 
 export default router;

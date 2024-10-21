@@ -13,3 +13,12 @@ export interface Product {
         count: number;
     };
 }
+
+export interface Category {
+    id: number;
+    name: string;
+    slug: string;
+    description?: string;
+    categoryImgUrl?: string;
+    products?: Product[];
+}

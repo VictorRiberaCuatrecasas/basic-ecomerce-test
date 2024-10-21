@@ -26,6 +26,9 @@
       "relation": "oneToMany",
       "target": "api::product.product",
       "mappedBy": "category"
+    },
+    "categoryImgUrl": {
+      "type": "string"
     }
   }
 }
