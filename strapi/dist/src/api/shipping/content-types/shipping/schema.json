@@ -1,0 +1,40 @@
+{
+    "kind": "collectionType",
+    "collectionName": "shippings",
+    "info": {
+        "singularName": "shipping",
+        "pluralName": "shippings",
+        "displayName": "Shipping"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "order": {
+            "type": "relation",
+            "relation": "oneToOne",
+            "target": "api::order.order",
+            "inversedBy": "shipping"
+        },
+        "shippingAddress": {
+            "type": "component",
+            "repeatable": false,
+            "component": "shared.address"
+        },
+        "shippingMethod": {
+            "type": "enumeration",
+            "enum": [
+                "standard",
+                "express"
+            ],
+            "default": "standard",
+            "required": true
+        },
+        "trackingNumber": {
+            "type": "string",
+            "default": "TRACK00000001",
+            "required": true
+        }
+    }
+}
