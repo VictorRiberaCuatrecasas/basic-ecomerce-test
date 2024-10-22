@@ -5,7 +5,7 @@
         <img :src="product.image" :alt="`Image of ${product.title}`" class="w-full h-48 object-contain rounded-md mb-4 transition-transform duration-300 group-hover:scale-110" />
 
         <router-link
-            :to="`/${product.category.slug}/${product.id}`"
+            :to="`/${product.category.slug}/${product.productId}`"
             class="text-base font-medium mb-2 transition-colors duration-300 group-hover:text-blue-500 cursor-pointer hover:underline"
             aria-label="View details for {{ product.title }}"
             id="product-title">

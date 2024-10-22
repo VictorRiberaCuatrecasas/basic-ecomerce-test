@@ -78,6 +78,48 @@ export const fetchCategories = async (): Promise<Category[]> => {
     }
 };
 
+export const fetchProductByProductId = async (productId: number): Promise<Product | null> => {
+    try {
+        const response = await fetch(`http://localhost:1337/api/products?filters[productId][$eq]=${productId}&populate[category]=*&populate[rating]=*`, {
+            headers: {
+                Authorization: `Bearer ${apiToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch product with productId: ${productId}. Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.data.length > 0) {
+            const product = data.data[0]; // Assuming productId is unique, take the first match
+            return {
+                id: product.id, // Strapi auto-generated id
+                productId: product.productId, // Fake API productId
+                title: product.title,
+                price: product.price,
+                description: product.description,
+                category: {
+                    name: product.category.name,
+                    slug: product.category.slug,
+                },
+                image: product.image || '',
+                rating: {
+                    rate: product.rating?.rate || null,
+                    count: product.rating?.count || null,
+                },
+            };
+        } else {
+            return null; // No product found with this productId
+        }
+    } catch (error) {
+        console.error(`Error fetching product by productId (${productId}):`, error);
+        return null;
+    }
+};
+
+
 export const fetchStrapiProducts = async (): Promise<Product[]> => {
     try {
         const response = await fetch('http://localhost:1337/api/products?pagination[limit]=400&populate[category]=*&populate[rating]=*', {
@@ -94,6 +136,7 @@ export const fetchStrapiProducts = async (): Promise<Product[]> => {
 
         return data.data.map((item: any) => ({
             id: item.id,
+            productId: item.productId,
             title: item.title,
             price: item.price,
             description: item.description,
@@ -202,7 +245,7 @@ export const fetchProductIds = async (): Promise<string[]> => {
 
         const data = await response.json();
 
-        return data.data.map((product: any) => product.id.toString());
+        return data.data.map((product: any) => product.productId.toString());
     } catch (error) {
         console.error('Error fetching product IDs from Strapi:', error);
         return [];
