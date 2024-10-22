@@ -20,7 +20,7 @@ export const fetchCategorySlugs = async (): Promise<string[]> => {
 
 export const fetchCategoryBySlug = async (slug: string): Promise<Category | null> => {
     try {
-        const response = await fetch(`http://localhost:1337/api/categories?filters[slug][$eq]=${slug}&populate[products][populate]=rating`, {
+        const response = await fetch(`http://localhost:1337/api/categories?filters[slug][$eq]=${slug}&populate[products][populate]=*`, {
             headers: {
                 Authorization: `Bearer ${apiToken}`,
             },

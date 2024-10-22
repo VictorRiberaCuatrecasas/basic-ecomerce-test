@@ -80,6 +80,7 @@ const loadCategory = async (slug: string): Promise<void> => {
             products.value = await fetchStrapiProducts();
         } else {
             const fetchedCategory = await fetchCategoryBySlug(slug);
+            console.log(fetchedCategory)
             if (fetchedCategory) {
                 category.value = fetchedCategory;
                 products.value = fetchedCategory.products ?? [];

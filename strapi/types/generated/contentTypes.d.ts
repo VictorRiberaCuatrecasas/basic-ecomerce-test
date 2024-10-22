@@ -528,8 +528,8 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
     name: Schema.Attribute.String;
     slug: Schema.Attribute.UID;
     description: Schema.Attribute.Text;
-    products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
     categoryImgUrl: Schema.Attribute.String;
+    products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;

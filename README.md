@@ -70,3 +70,5 @@ npm run build
 
 -   add speculation rules
 -   be more efficient with requests, strapi bulk fetch
+-   turn product and category into many to many relation, not done because of the whole schema fuckup and model fetched from fakeapi
+-   strapiservice, basically just a bunch of convenient functions that should be refactored

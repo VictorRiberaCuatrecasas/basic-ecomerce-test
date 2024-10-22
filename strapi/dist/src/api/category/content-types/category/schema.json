@@ -21,14 +21,14 @@
         "description": {
             "type": "text"
         },
+        "categoryImgUrl": {
+            "type": "string"
+        },
         "products": {
             "type": "relation",
             "relation": "oneToMany",
             "target": "api::product.product",
             "mappedBy": "category"
-        },
-        "categoryImgUrl": {
-            "type": "string"
         }
     }
 }
