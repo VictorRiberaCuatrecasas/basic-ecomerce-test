@@ -4,12 +4,8 @@
     "info": {
         "singularName": "cart-item",
         "pluralName": "cart-items",
-<<<<<<< HEAD
-        "displayName": "CartItem"
-=======
         "displayName": "CartItem",
         "description": ""
->>>>>>> ec75f058742bcc28233b35811b106b8ed94501d9
     },
     "options": {
         "draftAndPublish": true
@@ -21,10 +17,6 @@
             "relation": "oneToOne",
             "target": "api::product.product"
         },
-<<<<<<< HEAD
-        "quantity": {
-            "type": "integer"
-=======
         "cart": {
             "type": "relation",
             "relation": "manyToOne",
@@ -39,7 +31,6 @@
         "totalPrice": {
             "type": "biginteger",
             "required": true
->>>>>>> ec75f058742bcc28233b35811b106b8ed94501d9
         }
     }
 }
