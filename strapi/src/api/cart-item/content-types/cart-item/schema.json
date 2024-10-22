@@ -4,7 +4,8 @@
   "info": {
     "singularName": "cart-item",
     "pluralName": "cart-items",
-    "displayName": "CartItem"
+    "displayName": "CartItem",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -16,8 +17,20 @@
       "relation": "oneToOne",
       "target": "api::product.product"
     },
+    "cart": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::cart.cart",
+      "inversedBy": "cart_items"
+    },
     "quantity": {
-      "type": "integer"
+      "type": "biginteger",
+      "required": true,
+      "default": "0"
+    },
+    "totalPrice": {
+      "type": "biginteger",
+      "required": true
     }
   }
 }

@@ -4,65 +4,44 @@
   "info": {
     "singularName": "cart",
     "pluralName": "carts",
-    "displayName": "Cart",
-    "description": ""
+    "displayName": "Cart"
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "customer": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::customer.customer",
-      "inversedBy": "cart"
-    },
-    "cartItems": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::cart-item.cart-item"
-    },
-    "guestSessionId": {
-      "type": "string"
-    },
-    "totalPrice": {
-      "type": "decimal",
+    "total": {
+      "type": "biginteger",
       "required": true
     },
     "cartStatus": {
       "type": "enumeration",
       "enum": [
-        "open",
         "completed",
-        "abandoned"
-      ]
-    },
-    "orderUpdatedAt": {
-      "type": "datetime",
+        "pending",
+        "cancelled"
+      ],
+      "default": "pending",
       "required": true
     },
-    "discounts": {
-      "type": "decimal"
+    "cart_items": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::cart-item.cart-item",
+      "mappedBy": "cart"
     },
-    "taxes": {
-      "type": "decimal"
+    "customer": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::customer.customer",
+      "mappedBy": "cart"
     },
-    "currency": {
-      "type": "enumeration",
-      "enum": [
-        "EUR"
-      ],
-      "required": true,
-      "default": "EUR"
-    },
-    "shippingAddress": {
-      "type": "component",
-      "repeatable": true,
-      "component": "shared.address"
-    },
-    "notes": {
-      "type": "text"
+    "order": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::order.order",
+      "mappedBy": "cart"
     }
   }
 }

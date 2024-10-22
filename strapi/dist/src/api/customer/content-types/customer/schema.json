@@ -4,8 +4,7 @@
     "info": {
         "singularName": "customer",
         "pluralName": "customers",
-        "displayName": "Customer",
-        "description": ""
+        "displayName": "Customer"
     },
     "options": {
         "draftAndPublish": true
@@ -25,20 +24,7 @@
             "required": true
         },
         "phone": {
-            "type": "string",
-            "required": false
-        },
-        "password": {
-            "type": "password",
-            "required": true
-        },
-        "resetPasswordToken": {
-            "type": "string",
-            "required": true
-        },
-        "isActive": {
-            "type": "boolean",
-            "required": true
+            "type": "string"
         },
         "address": {
             "displayName": "address",
@@ -46,25 +32,16 @@
             "repeatable": false,
             "component": "shared.address"
         },
-        "orders": {
-            "type": "relation",
-            "relation": "oneToMany",
-            "target": "api::order.order",
-            "mappedBy": "customer"
-        },
-        "role": {
-            "type": "enumeration",
-            "enum": [
-                "admin",
-                "peasant"
-            ],
-            "required": true,
-            "default": "peasant"
-        },
         "cart": {
             "type": "relation",
             "relation": "oneToOne",
             "target": "api::cart.cart",
+            "inversedBy": "customer"
+        },
+        "order": {
+            "type": "relation",
+            "relation": "oneToOne",
+            "target": "api::order.order",
             "mappedBy": "customer"
         }
     }

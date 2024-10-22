@@ -4,90 +4,51 @@
     "info": {
         "singularName": "order",
         "pluralName": "orders",
-        "displayName": "Order",
-        "description": ""
+        "displayName": "Order"
     },
     "options": {
         "draftAndPublish": true
     },
     "pluginOptions": {},
     "attributes": {
-        "orderNumber": {
-            "type": "biginteger",
-            "required": true
-        },
         "customer": {
             "type": "relation",
-            "relation": "manyToOne",
+            "relation": "oneToOne",
             "target": "api::customer.customer",
-            "inversedBy": "orders"
+            "inversedBy": "order"
         },
-        "productsOrdered": {
+        "cart": {
             "type": "relation",
-            "relation": "oneToMany",
-            "target": "api::cart-item.cart-item"
+            "relation": "oneToOne",
+            "target": "api::cart.cart",
+            "inversedBy": "order"
+        },
+        "totalPrice": {
+            "type": "biginteger",
+            "required": true
         },
         "orderStatus": {
             "type": "enumeration",
             "enum": [
                 "pending",
-                "confirmed",
                 "shipped",
                 "delivered",
                 "cancelled"
             ],
-            "required": true,
-            "default": "pending"
-        },
-        "paymentStatus": {
-            "type": "enumeration",
-            "enum": [
-                "pending",
-                "paid",
-                "failed",
-                "refunded"
-            ],
-            "required": true,
-            "default": "pending"
-        },
-        "totalPrice": {
-            "type": "decimal",
-            "required": true,
-            "default": 0
-        },
-        "subtotalPrice": {
-            "type": "decimal",
-            "required": true,
-            "default": 0
-        },
-        "shippingFee": {
-            "type": "decimal",
-            "required": true,
-            "default": 0
-        },
-        "shippingMethod": {
-            "type": "enumeration",
-            "enum": [
-                "standard",
-                "express"
-            ],
-            "default": "standard",
+            "default": "pending",
             "required": true
         },
-        "billingAddress": {
-            "type": "component",
-            "repeatable": true,
-            "component": "shared.address"
+        "payment": {
+            "type": "relation",
+            "relation": "oneToOne",
+            "target": "api::payment.payment",
+            "mappedBy": "order"
         },
-        "orderCreatedAt": {
-            "type": "datetime",
-            "required": false
-        },
-        "notes": {
-            "type": "text"
-        },
-        "trackingNumber": {
-            "type": "string"
+        "shipping": {
+            "type": "relation",
+            "relation": "oneToOne",
+            "target": "api::shipping.shipping",
+            "mappedBy": "order"
         }
     }
 }

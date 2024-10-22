@@ -3,7 +3,10 @@ export interface Product {
     title: string;
     price: number;
     description: string;
-    category: string;
+    category: {
+        name: string;
+        slug: string;
+    };
     image: string;
     rating: {
         rate: number;
@@ -11,9 +14,11 @@ export interface Product {
     };
 }
 
-export interface ProductCategories {
-    electronics: Product[];
-    jewelery: Product[];
-    menClothing: Product[];
-    womenClothing: Product[];
+export interface Category {
+    id: number;
+    name: string;
+    slug: string;
+    description?: string;
+    categoryImgUrl?: string;
+    products?: Product[];
 }

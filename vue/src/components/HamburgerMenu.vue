@@ -19,7 +19,6 @@ const handleClick = () => {
     }
 };
 
-// Update the local state based on global events
 const openMenu = () => {
     isMenuOpen.value = true;
 };
@@ -28,7 +27,6 @@ const closeMenu = () => {
     isMenuOpen.value = false;
 };
 
-// Add event listeners for opening and closing the menu
 onMounted(() => {
     window.addEventListener('open-menu', openMenu);
     window.addEventListener('close-menu', closeMenu);

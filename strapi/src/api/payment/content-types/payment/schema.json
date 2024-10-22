@@ -11,12 +11,38 @@
   },
   "pluginOptions": {},
   "attributes": {
+    "order": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::order.order",
+      "inversedBy": "payment"
+    },
     "paymentMethod": {
       "type": "enumeration",
       "enum": [
-        "one",
-        "two"
-      ]
+        "credit_card",
+        "paypal",
+        "bank_transfer"
+      ],
+      "default": "credit_card",
+      "required": true
+    },
+    "amount": {
+      "type": "biginteger",
+      "required": true
+    },
+    "paymentStatus": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "completed",
+        "failed"
+      ],
+      "required": true,
+      "default": "pending"
+    },
+    "transactionId": {
+      "type": "string"
     }
   }
 }

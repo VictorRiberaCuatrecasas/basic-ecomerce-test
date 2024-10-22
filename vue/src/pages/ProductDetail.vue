@@ -1,23 +1,16 @@
 <template>
   <div>
-    <h1>
-      Product Detail for Item: {{ itemId }} in Category: {{ categoryName }}
-    </h1>
+    <h1>Product Detail for Item: {{ productId }} in Category: {{ categorySlug }}</h1>
     <!-- Render the product details here -->
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useRoute } from "vue-router";
+import { useRoute } from 'vue-router';
 
-// Access the route
 const route = useRoute();
+const categorySlug = route.params.categorySlug;
+const productId = route.params.productId;
 
-// Get the parameters from the route
-const categoryName = route.params.categoryName;
-const itemId = route.params.itemId;
+// Fetch product details from Strapi or your service using these parameters
 </script>
-
-<style scoped>
-/* Add your styles here */
-</style>

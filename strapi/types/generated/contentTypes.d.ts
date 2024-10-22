@@ -513,30 +513,59 @@ export interface ApiAboutAbout extends Struct.SingleTypeSchema {
   };
 }
 
-export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
-  collectionName: 'articles';
+export interface ApiCartCart extends Struct.CollectionTypeSchema {
+  collectionName: 'carts';
   info: {
-    singularName: 'article';
-    pluralName: 'articles';
-    displayName: 'Article';
-    description: 'Create your blog content';
+    singularName: 'cart';
+    pluralName: 'carts';
+    displayName: 'Cart';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    title: Schema.Attribute.String;
-    description: Schema.Attribute.Text &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 80;
-      }>;
-    slug: Schema.Attribute.UID<'title'>;
-    cover: Schema.Attribute.Media<'images' | 'files' | 'videos'>;
-    author: Schema.Attribute.Relation<'manyToOne', 'api::author.author'>;
-    category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
-    blocks: Schema.Attribute.DynamicZone<
-      ['shared.media', 'shared.quote', 'shared.rich-text', 'shared.slider']
+    total: Schema.Attribute.BigInteger & Schema.Attribute.Required;
+    cartStatus: Schema.Attribute.Enumeration<
+      ['completed', 'pending', 'cancelled']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'pending'>;
+    cart_items: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::cart-item.cart-item'
     >;
+    customer: Schema.Attribute.Relation<'oneToOne', 'api::customer.customer'>;
+    order: Schema.Attribute.Relation<'oneToOne', 'api::order.order'>;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::cart.cart'>;
+  };
+}
+
+export interface ApiCartItemCartItem extends Struct.CollectionTypeSchema {
+  collectionName: 'cart_items';
+  info: {
+    singularName: 'cart-item';
+    pluralName: 'cart-items';
+    displayName: 'CartItem';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    product: Schema.Attribute.Relation<'oneToOne', 'api::product.product'>;
+    cart: Schema.Attribute.Relation<'manyToOne', 'api::cart.cart'>;
+    quantity: Schema.Attribute.BigInteger &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'0'>;
+    totalPrice: Schema.Attribute.BigInteger & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -547,36 +576,8 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::article.article'
+      'api::cart-item.cart-item'
     >;
-  };
-}
-
-export interface ApiAuthorAuthor extends Struct.CollectionTypeSchema {
-  collectionName: 'authors';
-  info: {
-    singularName: 'author';
-    pluralName: 'authors';
-    displayName: 'Author';
-    description: 'Create authors for your content';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    name: Schema.Attribute.String;
-    avatar: Schema.Attribute.Media<'images' | 'files' | 'videos'>;
-    email: Schema.Attribute.String;
-    articles: Schema.Attribute.Relation<'oneToMany', 'api::article.article'>;
-    createdAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    publishedAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'api::author.author'>;
   };
 }
 
@@ -594,8 +595,9 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   attributes: {
     name: Schema.Attribute.String;
     slug: Schema.Attribute.UID;
-    articles: Schema.Attribute.Relation<'oneToMany', 'api::article.article'>;
     description: Schema.Attribute.Text;
+    categoryImgUrl: Schema.Attribute.String;
+    products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -607,6 +609,39 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::category.category'
+    >;
+  };
+}
+
+export interface ApiCustomerCustomer extends Struct.CollectionTypeSchema {
+  collectionName: 'customers';
+  info: {
+    singularName: 'customer';
+    pluralName: 'customers';
+    displayName: 'Customer';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    firstName: Schema.Attribute.String & Schema.Attribute.Required;
+    lastName: Schema.Attribute.String & Schema.Attribute.Required;
+    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    phone: Schema.Attribute.String;
+    address: Schema.Attribute.Component<'shared.address', false>;
+    cart: Schema.Attribute.Relation<'oneToOne', 'api::cart.cart'>;
+    order: Schema.Attribute.Relation<'oneToOne', 'api::order.order'>;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::customer.customer'
     >;
   };
 }
@@ -639,6 +674,78 @@ export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
+  collectionName: 'orders';
+  info: {
+    singularName: 'order';
+    pluralName: 'orders';
+    displayName: 'Order';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    customer: Schema.Attribute.Relation<'oneToOne', 'api::customer.customer'>;
+    cart: Schema.Attribute.Relation<'oneToOne', 'api::cart.cart'>;
+    totalPrice: Schema.Attribute.BigInteger & Schema.Attribute.Required;
+    orderStatus: Schema.Attribute.Enumeration<
+      ['pending', 'shipped', 'delivered', 'cancelled']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'pending'>;
+    payment: Schema.Attribute.Relation<'oneToOne', 'api::payment.payment'>;
+    shipping: Schema.Attribute.Relation<'oneToOne', 'api::shipping.shipping'>;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::order.order'>;
+  };
+}
+
+export interface ApiPaymentPayment extends Struct.CollectionTypeSchema {
+  collectionName: 'payments';
+  info: {
+    singularName: 'payment';
+    pluralName: 'payments';
+    displayName: 'Payment';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    order: Schema.Attribute.Relation<'oneToOne', 'api::order.order'>;
+    paymentMethod: Schema.Attribute.Enumeration<
+      ['credit_card', 'paypal', 'bank_transfer']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'credit_card'>;
+    amount: Schema.Attribute.BigInteger & Schema.Attribute.Required;
+    paymentStatus: Schema.Attribute.Enumeration<
+      ['pending', 'completed', 'failed']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'pending'>;
+    transactionId: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::payment.payment'
+    >;
+  };
+}
+
 export interface ApiProductProduct extends Struct.CollectionTypeSchema {
   collectionName: 'products';
   info: {
@@ -654,14 +761,11 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     title: Schema.Attribute.String & Schema.Attribute.Required;
     price: Schema.Attribute.Decimal & Schema.Attribute.Required;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
-    category: Schema.Attribute.Enumeration<
-      ['electronics', 'jewelery', 'menClothing', 'womenClothing']
-    > &
-      Schema.Attribute.Required;
     productId: Schema.Attribute.BigInteger & Schema.Attribute.Required;
     image: Schema.Attribute.String;
     rating: Schema.Attribute.Component<'shared.rating', false> &
       Schema.Attribute.Required;
+    category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -673,6 +777,40 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::product.product'
+    >;
+  };
+}
+
+export interface ApiShippingShipping extends Struct.CollectionTypeSchema {
+  collectionName: 'shippings';
+  info: {
+    singularName: 'shipping';
+    pluralName: 'shippings';
+    displayName: 'Shipping';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    order: Schema.Attribute.Relation<'oneToOne', 'api::order.order'>;
+    shippingAddress: Schema.Attribute.Component<'shared.address', false>;
+    shippingMethod: Schema.Attribute.Enumeration<['standard', 'express']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'standard'>;
+    trackingNumber: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'TRACK00000001'>;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::shipping.shipping'
     >;
   };
 }
@@ -1053,11 +1191,15 @@ declare module '@strapi/strapi' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::about.about': ApiAboutAbout;
-      'api::article.article': ApiArticleArticle;
-      'api::author.author': ApiAuthorAuthor;
+      'api::cart.cart': ApiCartCart;
+      'api::cart-item.cart-item': ApiCartItemCartItem;
       'api::category.category': ApiCategoryCategory;
+      'api::customer.customer': ApiCustomerCustomer;
       'api::global.global': ApiGlobalGlobal;
+      'api::order.order': ApiOrderOrder;
+      'api::payment.payment': ApiPaymentPayment;
       'api::product.product': ApiProductProduct;
+      'api::shipping.shipping': ApiShippingShipping;
       'admin::permission': AdminPermission;
       'admin::user': AdminUser;
       'admin::role': AdminRole;

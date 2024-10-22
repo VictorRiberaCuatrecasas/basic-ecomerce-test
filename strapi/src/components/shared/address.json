@@ -5,18 +5,11 @@
   },
   "options": {},
   "attributes": {
-    "addressLine1": {
+    "street": {
       "type": "string",
       "required": true
-    },
-    "addressLine2": {
-      "type": "string"
     },
     "city": {
-      "type": "string",
-      "required": true
-    },
-    "postalCode": {
       "type": "string",
       "required": true
     },
@@ -24,8 +17,9 @@
       "type": "string",
       "required": true
     },
-    "contactPhone": {
-      "type": "string"
+    "postalCode": {
+      "type": "string",
+      "required": true
     }
   }
 }
